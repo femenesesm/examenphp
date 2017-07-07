@@ -1,84 +1,74 @@
 <?php
-include ('clases/Producto.php');
-include ('lib/ConsultaProductos.php');
-$oProducto1=new Producto();
-$oProducto1->nombre="Nuevo Producto";
-$oProducto1->codigo="001";
-$oProducto2=new Producto("Nuevo Producto 002",100000,"002");
-$oProducto3=new Producto("Nuevo Producto 003",250000,"003");
-$aProductos[0]=$oProducto1;
-$aProductos[1]=$oProducto2;
-$aProductos[2]=$oProducto3;
+    include './constantes.php';
+    include './lib.php';
+    
 ?>
-
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <meta charset="UTF-8">
+        <link href="css/estilo.css?v=<?= time()?>" rel="stylesheet" type="text/css"/>
         <title></title>
     </head>
     <body>
+        <?php if(isset($_SESSION['USR'])) { ?>
+        <div id="menu">
+            <ul class="nav">
         
+        <li><a href=""> inicio</a></li>
         
-        <?php
-        
-       // var_dump($_SERVER);
-         $miconn=new mysqli("10.20.25.214", "root", "avaras08", "atencionPacientes");
-                   
-         echo $miconn->host_info;
-         
-         echo "<br>";
-         
-         echo $miconn->client_info;
-         echo "<br>";
-         echo $miconn->info;
-         echo "<br>";
-         echo $miconn->get_client_info();
-         echo "<br>";
-        
-         
-         if ($miconn->connect_errno) {
-            echo "Fallo al conectar a MySQL: (" . $miconn->connect_errno . ") " . $miconn->connect_error;
-            }
-            echo $miconn->host_info . "\n";
+        <li><a href=""> CONSULTAS</a>
+            <ul>
+            <li><a href="formularios/consulta/agendarConsulta.php">Agendar Consulta</a></li>
+            <li><a href="formularios/consulta/listarConsulta.php">Listar Consultas</a></li>
+            <li><a href="formularios/consulta/estadoConsulta.php">Modificar Estado de Consulta</a></li>
+            </ul>   
             
-            /* Consultas de selección que devuelven un conjunto de resultados */
-            if ($resultado = $miconn->query("SELECT * FROM paciente"))
-                echo "La selección devolvió N°". $resultado->num_rows."filas";
+            <li><a href=""> MEDICOS</a>
+            <ul>
+            <li><a href="formularios/medico/agregarMedico.php">Contratar Medico</a></li>
+            <li><a href="formularios/medico/eliminarMedico.php">Despedir Medicos</a></li>
+            <li><a href="formularios/medico/listarMedico.php">Listar Medicos</a></li>
+            </ul>   
+                
+         <li><a href=""> PACIENTE</a>
+            <ul>
+             <li><a href="formularios/paciente/agregarPaciente.php">Agregar Pacientes</a></li>
+             <li><a href="formularios/paciente/eliminarPaciente.php">Eliminar Pacientes</a></li>
+             <li><a href="formularios/paciente/listarPaciente.php">Ingresar Pacientes</a></li>
+            </ul>                 
+                    
+         <li><a href=""> USUARIOS</a>
+            <ul>
+            <li><a href="formularios/usuario/agregarUsuario.php">Agregar Usuario</a></li>
+            <li><a href="formularios/usuario/eliminarUsuario.php">Eliminar Usuarios</a></li>
+            <li><a href="formularios/usuario/listarUsuario.php">Listar Usuarios</a></li>
+            </ul>    
+            </ul>
+         
+        </div>
+        <div align="right"><button><a id="cancelar" href="lib/CerrarSesion.php">Cerrar Sesion</a></button></div>
+            
+        <?php } ?>
+            <?php if (!isset($_SESSION['USR'])) { ?>
+            <div id="login">
+                </head>
+                <body>
+                    <div>
+                        <img src="img/cruz.png"> 
+                    </div>
+                    <p>HOSPITAL TETENGO </p>      
+                </body> 
+    </html>
+    <form action="lib/Login.php" method="POST">
+        <div id="general"> <h1>Sistema de Ingreso </h1>
+            <input type="text" placeholder="Usuario"  name="usuario">
+            <input type="password" placeholder="Contraseña" name="contrasena">
+            <input type="submit" value="Ingresar">
+            </form>
+        </div>
 
-                /* liberar el conjunto de resultados */
-                $resultado->close();
-        ?>
-    </body>
-</html>
-
-
-
-
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
         <?php
-        $aProductos2=new ConsultaProductos();
-        
-        foreach ($aProductos2->Lista() as $oPro){
-          echo $oPro->codigo." ".$oPro->nombre."/".$oPro->precio."/usd ".$oPro->totalUSD();
-          echo "<br>";
-        }
-        ?>
+    }
+    ?>
     </body>
 </html>

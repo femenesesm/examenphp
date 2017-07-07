@@ -52,6 +52,57 @@ class Atencion{
     function Especialidad(){
         return $this->especialidad;
     }  
+    
+    function Selecciona(){
+		
+		if (!$this->querysel){
+		$db=dbconnect();
+		//funcion que permite ingresar una nueva atencion
+		
+			$sqlsel="select numAtencion,fechaHrAten,pacienteAtendido,medicoTratante,estado,rangoFechas,meses,especialidad,Paciente_rutPaciente,Medico_rutMedico from atencion order by nombre";
+		
+			/*Preparación SQL*/
+			$this->querysel=$db->prepare($sqlsel);
+		
+			$this->querysel->execute();
+		}
+		
+		$registroAtencion = $this->querysel->fetch();
+		if ($registroAtencion){
+			return new self(
+                                $registroAtencion['numAtencion'],
+                                $registroAtencion['fechaHrAten'],
+                                $registroAtencion['pacienteAtendido'],
+                                $registroAtencion['medicoTratante'],
+                                $registroAtencion['estado'],
+                                $registroAtencion['rangoFechas'], 
+                                $registroAtencion['meses'],
+                                $registroAtencion['especialidad'],
+                                $registroAtencion['Paciente_rutPaciente'],
+                                $registroAtencion['Medico_rutMedico']);			
+		}
+		else {
+			return false;
+			
+		}
+	}
+	
+	function Elimina($numAtencion){
+	
+		$db=dbconnect();
+		
+			/*Definición del query que permitira eliminar una atencion*/
+			$sqldel="delete from numAtencion where numAtencion=:id";
+	
+			/*Preparación SQL*/
+			$querydel=$db->prepare($sqldel);
+			
+			$querydel->bindParam(':id',$id);
+			
+			$valaux=$querydel->execute();
+	
+		return $valaux;
+	}
 }
 
 
